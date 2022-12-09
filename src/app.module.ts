@@ -13,6 +13,7 @@ import { Project } from './modules/project/entities/project.entity';
 import { Task } from './modules/task/entities/task.entity';
 import { SubTask } from './modules/sub-task/entities/sub-task.entity';
 import { Comment } from './modules/comment/entities/comment.entity';
+import { userProject } from './modules/userProject/entities/userProject';
 dotenv.config();
 @Module({
   imports: [
@@ -28,10 +29,10 @@ dotenv.config();
       username: process.env.DBUSERNAME,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
-      entities: [User, Project, Task, SubTask, Comment],
-      
-      migrationsTableName: 'migrations',
-      synchronize: false,
+      entities: [User, Project, Task, SubTask, Comment, userProject],
+
+      //migrationsTableName: 'migrations',
+      synchronize: true,
       dropSchema: false,
     }),
   ],
