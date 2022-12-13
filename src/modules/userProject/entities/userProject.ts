@@ -1,16 +1,12 @@
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
-export class SubTask {
+export class userProject {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  taskId: number;
+  userId: number;
   @Column()
   projectId: number;
   @Column()
-  reporterId: string;
-  @Column()
-  assigneeId: string;
-  @Column({ default: 'To-do' })
-  status: string;
+  role: string;
 }

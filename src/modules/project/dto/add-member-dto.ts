@@ -6,15 +6,13 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class CreateUserDto {
-  @IsString()
+export class addMemberDto {
   @IsNotEmpty()
-  name: string;
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
-  @IsNotEmpty()
-  password: string;
   @IsNumber()
+  userId: number;
+  @IsNotEmpty()
+  @IsNumber()
+  projectId: number;
+  @IsNotEmpty()
   role: string;
 }
