@@ -14,6 +14,7 @@ import { TaskService } from './task.service';
 import { createTaskDto } from './dto/create-task.dto';
 
 import { Task } from './entities/task.entity';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @Controller('task')
 export class TaskController {
@@ -25,13 +26,16 @@ export class TaskController {
   }
 
   @Get()
-  findAllByProject(@Query('page') page: number, @Query('pid') pid: number) {
+  findAllByProject(
+    @Query('page') page: number,
+    @Query('projectId') projectId: number,
+  ) {
     const query = {
       take: 5, // so luong ket qua trong 1 trang
       page: page,
     };
 
-    return this.taskService.findAllByProject(query, pid);
+    return this.taskService.findAllByProject(query, projectId);
   }
 
   @Get(':id')
@@ -40,12 +44,15 @@ export class TaskController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: createTaskDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTaskDto: createTaskDto,
+  ): Promise<UpdateResult> {
     return this.taskService.update(+id, updateTaskDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.taskService.remove(+id);
   }
 }
