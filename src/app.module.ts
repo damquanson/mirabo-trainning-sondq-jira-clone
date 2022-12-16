@@ -14,6 +14,8 @@ import { Task } from './modules/task/entities/task.entity';
 import { SubTask } from './modules/sub-task/entities/sub-task.entity';
 import { Comment } from './modules/comment/entities/comment.entity';
 import { userProject } from './modules/userProject/entities/userProject';
+import { AuthModule } from './modules/auth/auth.module';
+import { AuthService } from './modules/auth/auth.service';
 dotenv.config();
 @Module({
   imports: [
@@ -35,8 +37,9 @@ dotenv.config();
       synchronize: true,
       dropSchema: false,
     }),
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthService],
 })
 export class AppModule {}
