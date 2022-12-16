@@ -16,6 +16,8 @@ import { Comment } from './modules/comment/entities/comment.entity';
 import { userProject } from './modules/userProject/entities/userProject';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/auth.service';
+import { PassportModule } from '@nestjs/passport';
+import { MailerModule } from '@nestjs-modules/mailer';
 dotenv.config();
 @Module({
   imports: [
@@ -38,8 +40,18 @@ dotenv.config();
       dropSchema: false,
     }),
     AuthModule,
+    PassportModule.register({ session: true }),
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.gmail.com',
+        auth: {
+          user: 'damquanson@gmail.com',
+          pass: 'ezolxttbomelnzzu',
+        },
+      },
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [AppService],
 })
 export class AppModule {}

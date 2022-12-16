@@ -1,3 +1,4 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import {
@@ -7,6 +8,7 @@ import {
   Repository,
   UpdateResult,
 } from 'typeorm';
+import { User } from '../user/entities/user.entity';
 import { userProject } from '../userProject/entities/userProject';
 import { addMemberDto } from './dto/add-member-dto';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -17,7 +19,9 @@ import { Project } from './entities/project.entity';
 export class ProjectService {
   constructor(
     @InjectRepository(Project) private projectRepo: Repository<Project>,
+    @InjectRepository(User) private userRepo: Repository<User>,
     @InjectDataSource() private dataSource: DataSource,
+    private mailServices: MailerService,
   ) {}
   async create(createProjectDto: CreateProjectDto): Promise<Project> {
     return await this.projectRepo.save(createProjectDto);
@@ -66,6 +70,15 @@ export class ProjectService {
         },
       ])
       .execute();
+    const member = await this.userRepo.findOneBy({ id: addMemberDto.userId });
+    console.log(member);
+    await this.mailServices.sendMail({
+      to: member.email,
+      from: 'damquanson@gmail.com',
+      subject: ' You have just added a new project! Check it',
+      text: 'You have just added a new project with rule:' + addMemberDto.role,
+    });
+
     return addMember;
   }
   async removeMember(addMemberDto: addMemberDto): Promise<DeleteResult> {
