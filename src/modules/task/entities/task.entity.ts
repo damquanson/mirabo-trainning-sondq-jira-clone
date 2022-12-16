@@ -6,9 +6,11 @@ export class Task {
   @Column()
   projectId: number;
   @Column()
-  reporterId: string;
+  reporterId: number;
   @Column()
-  assigneeId: string;
+  assigneeId: number;
   @Column({ default: 'To-do' })
   status: string;
+  @Column({ default: 0 })
+  logWork: number;
 }

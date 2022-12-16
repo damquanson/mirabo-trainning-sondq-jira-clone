@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { createTaskDto } from './dto/create-task.dto';
+
 import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TaskService {
   constructor(@InjectRepository(Task) private taskRepo: Repository<Task>) {}
-  create(createTaskDto: CreateTaskDto) {
+  create(createTaskDto: createTaskDto) {
     return this.taskRepo.save(createTaskDto);
   }
 
-  async findAll(query) {
+  async findAllByProject(query, projectId) {
     const take = query.take;
     const page = query.page;
     const skip = (page - 1) * take;
 
     const [result, total] = await this.taskRepo.findAndCount({
-      // where: { questionname: Like('%' + keyword + '%') }, //order: { questionname: "DESC" },
+      where: { projectId: projectId }, //order: { questionname: "DESC" },
       take: take,
       skip: skip,
     });
@@ -33,9 +33,11 @@ export class TaskService {
     return await this.taskRepo.findOneBy({ id: id });
   }
 
-  async update(id: number, updateTaskDto: CreateTaskDto): Promise<Task> {
-    updateTaskDto['id'] = id;
-    return await this.taskRepo.save(updateTaskDto);
+  async update(
+    id: number,
+    updateTaskDto: createTaskDto,
+  ): Promise<UpdateResult> {
+    return await this.taskRepo.update(id, updateTaskDto);
   }
 
   async remove(id: number): Promise<DeleteResult> {

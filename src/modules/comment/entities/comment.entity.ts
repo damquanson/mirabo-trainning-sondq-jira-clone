@@ -4,9 +4,9 @@ export class Comment {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  taskOrSubtaskId: string;
+  taskOrSubtaskId: number;
   @Column()
-  userId: string;
+  userId: number;
   @Column()
   isTask: boolean;
   @Column({ default: 'User' })

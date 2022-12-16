@@ -11,29 +11,31 @@ import {
   Query,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { createTaskDto } from './dto/create-task.dto';
+
 import { Task } from './entities/task.entity';
+import { DeleteResult, UpdateResult } from 'typeorm';
 
 @Controller('task')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
-  @UsePipes(ValidationPipe)
-  create(@Body() createTaskDto: CreateTaskDto) {
+  create(@Body() createTaskDto: createTaskDto) {
     return this.taskService.create(createTaskDto);
   }
 
   @Get()
-  findAll(@Query('page') page: number) {
+  findAllByProject(
+    @Query('page') page: number,
+    @Query('projectId') projectId: number,
+  ) {
     const query = {
-      keyword: '',
       take: 5, // so luong ket qua trong 1 trang
       page: page,
     };
 
-    return this.taskService.findAll(query);
+    return this.taskService.findAllByProject(query, projectId);
   }
 
   @Get(':id')
@@ -42,12 +44,15 @@ export class TaskController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTaskDto: createTaskDto,
+  ): Promise<UpdateResult> {
     return this.taskService.update(+id, updateTaskDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.taskService.remove(+id);
   }
 }
