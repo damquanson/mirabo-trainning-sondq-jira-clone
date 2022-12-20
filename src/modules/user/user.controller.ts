@@ -21,6 +21,14 @@ import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('/forgot/:id')
+  forgotPassword(@Param('id') id: number) {
+    return this.userService.createKey(id);
+  }
+  @Get('/reset/:token')
+  resetPassword(@Param('token') token: string, @Body() body) {
+    return this.userService.reset(token, body.password);
+  }
   @Post()
   @UsePipes(ValidationPipe)
   create(@Body() createUserDto: CreateUserDto): Promise<ResponseUserDto> {

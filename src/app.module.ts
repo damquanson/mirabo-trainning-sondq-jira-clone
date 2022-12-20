@@ -16,6 +16,7 @@ import { Comment } from './modules/comment/entities/comment.entity';
 import { userProject } from './modules/userProject/entities/userProject';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/auth.service';
+import { Reset } from './modules/user/entities/reset.entity';
 dotenv.config();
 @Module({
   imports: [
@@ -31,7 +32,7 @@ dotenv.config();
       username: process.env.DBUSERNAME,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
-      entities: [User, Project, Task, SubTask, Comment, userProject],
+      entities: [User, Project, Task, SubTask, Comment, userProject, Reset],
 
       //migrationsTableName: 'migrations',
       synchronize: true,
