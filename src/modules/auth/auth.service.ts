@@ -30,12 +30,10 @@ export class AuthService {
     };
   }
   async validateUserGoogle(details: UserDetails) {
-    console.log('AuthService');
-    console.log(details);
     const user = await this.userRepository.findOneBy({ email: details.email });
-    console.log(user);
+
     if (user) return user;
-    console.log('User not found. Creating...');
+
     details['name'] = details.displayName;
     delete details.displayName;
     details['password'] = 'randompassword';

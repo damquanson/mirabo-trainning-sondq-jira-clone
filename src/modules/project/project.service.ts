@@ -71,7 +71,7 @@ export class ProjectService {
       ])
       .execute();
     const member = await this.userRepo.findOneBy({ id: addMemberDto.userId });
-    console.log(member);
+
     await this.mailServices.sendMail({
       to: member.email,
       from: 'damquanson@gmail.com',

@@ -11,6 +11,7 @@ import { User } from '../user/entities/user.entity';
 import { AuthController } from './auth.controller';
 import { GoogleStrategy } from './strategies/GoogleStrategy';
 import { SessionSerializer } from './Serializer';
+require('dotenv').config();
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { SessionSerializer } from './Serializer';
 
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '333s' },
+      signOptions: { expiresIn: process.env.EXPTIME },
     }),
   ],
   controllers: [AuthController],

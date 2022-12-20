@@ -43,10 +43,10 @@ dotenv.config();
     PassportModule.register({ session: true }),
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.gmail.com',
+        host: process.env.HOSTMAIL,
         auth: {
-          user: 'damquanson@gmail.com',
-          pass: 'ezolxttbomelnzzu',
+          user: process.env.USERMAIL,
+          pass: process.env.PASSMAIL,
         },
       },
     }),
