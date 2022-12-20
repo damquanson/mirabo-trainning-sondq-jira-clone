@@ -14,6 +14,8 @@ import { addMemberDto } from './dto/add-member-dto';
 import { CreateProjectDto } from './dto/create-project.dto';
 
 import { Project } from './entities/project.entity';
+import { template } from './email.template';
+import { Invitation } from './entities/invitation.entity';
 
 @Injectable()
 export class ProjectService {
@@ -57,29 +59,36 @@ export class ProjectService {
   async remove(id: number): Promise<DeleteResult> {
     return await this.projectRepo.delete(id);
   }
-  async addMember(addMemberDto: addMemberDto): Promise<InsertResult> {
-    const addMember = await this.dataSource
+  async addMember(addMemberDto: addMemberDto): Promise<String> {
+    const invitation = await this.dataSource
       .createQueryBuilder()
       .insert()
-      .into(userProject)
-      .values([
-        {
-          projectId: addMemberDto.projectId,
-          userId: addMemberDto.userId,
-          role: addMemberDto.role,
-        },
-      ])
+      .into(Invitation)
+      .values({
+        userId: addMemberDto.userId,
+        projectId: addMemberDto.projectId,
+        role: addMemberDto.role,
+      })
       .execute();
     const member = await this.userRepo.findOneBy({ id: addMemberDto.userId });
 
+    const project = await this.projectRepo.findOneBy({
+      id: addMemberDto.projectId,
+    });
+    const inviter = await this.userRepo.findOneBy({ id: project.ownerId });
     await this.mailServices.sendMail({
       to: member.email,
       from: 'damquanson@gmail.com',
       subject: ' You have just added a new project! Check it',
-      text: 'You have just added a new project with rule:' + addMemberDto.role,
+      html: template(
+        project.name,
+        inviter.name,
+        addMemberDto.role,
+        inviter.email,
+      ),
     });
 
-    return addMember;
+    return 'Success';
   }
   async removeMember(addMemberDto: addMemberDto): Promise<DeleteResult> {
     const removeMember = await this.dataSource
@@ -90,5 +99,42 @@ export class ProjectService {
       .andWhere('projectId=:pid', { pid: addMemberDto.projectId })
       .execute();
     return removeMember;
+  }
+  async acceptInvite(id: number) {
+    const invitation = await this.dataSource
+      .getRepository(Invitation)
+      .createQueryBuilder('Invitation')
+      .where('Invitation.id = :id', { id: id })
+      .getOne();
+
+    await this.dataSource
+      .createQueryBuilder()
+      .insert()
+      .into(userProject)
+      .values([
+        {
+          projectId: invitation.projectId,
+          userId: invitation.userId,
+          role: invitation.role,
+        },
+      ])
+      .execute();
+    await this.dataSource
+      .createQueryBuilder()
+      .update(User)
+      .set({ status: 'Accept' })
+      .where('id = :id', { id: id })
+      .execute();
+    return 'Success';
+  }
+  async ignoreInvite(id: number) {
+    const invitation = await this.dataSource
+      .createQueryBuilder()
+      .update(User)
+      .set({ status: 'Reject' })
+      .where('id = :id', { id: id })
+      .execute();
+
+    return 'Success';
   }
 }

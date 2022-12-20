@@ -18,6 +18,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { Invitation } from './modules/project/entities/invitation.entity';
 dotenv.config();
 @Module({
   imports: [
@@ -33,7 +34,15 @@ dotenv.config();
       username: process.env.DBUSERNAME,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
-      entities: [User, Project, Task, SubTask, Comment, userProject],
+      entities: [
+        User,
+        Project,
+        Task,
+        SubTask,
+        Comment,
+        userProject,
+        Invitation,
+      ],
 
       //migrationsTableName: 'migrations',
       synchronize: true,

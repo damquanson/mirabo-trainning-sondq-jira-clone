@@ -41,7 +41,7 @@ export class ProjectController {
     return this.projectService.remove(id);
   }
   @Post('member/add')
-  async addMember(@Body() addMemberDto: addMemberDto): Promise<InsertResult> {
+  async addMember(@Body() addMemberDto: addMemberDto): Promise<String> {
     return await this.projectService.addMember(addMemberDto);
   }
   @Post('member/remove')
@@ -49,5 +49,13 @@ export class ProjectController {
     @Body() removeMemberDto: addMemberDto,
   ): Promise<DeleteResult> {
     return await this.projectService.removeMember(removeMemberDto);
+  }
+  @Get('member/accept/:id')
+  async acceptInvite(@Param('id') id: number): Promise<String> {
+    return await this.projectService.acceptInvite(id);
+  }
+  @Get('member/ignore/:id')
+  async ignoreInvite(@Param('id') id: number): Promise<String> {
+    return await this.projectService.ignoreInvite(id);
   }
 }
