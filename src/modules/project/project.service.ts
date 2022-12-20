@@ -60,6 +60,7 @@ export class ProjectService {
     return await this.projectRepo.delete(id);
   }
   async addMember(addMemberDto: addMemberDto): Promise<String> {
+    let random = (Math.random() * 10 + 1).toString(36).substring(1);
     const invitation = await this.dataSource
       .createQueryBuilder()
       .insert()
@@ -68,6 +69,7 @@ export class ProjectService {
         userId: addMemberDto.userId,
         projectId: addMemberDto.projectId,
         role: addMemberDto.role,
+        token: random,
       })
       .execute();
     const member = await this.userRepo.findOneBy({ id: addMemberDto.userId });
@@ -85,6 +87,7 @@ export class ProjectService {
         inviter.name,
         addMemberDto.role,
         inviter.email,
+        random,
       ),
     });
 
@@ -100,13 +103,13 @@ export class ProjectService {
       .execute();
     return removeMember;
   }
-  async acceptInvite(id: number) {
+  async acceptInvite(token: string) {
     const invitation = await this.dataSource
       .getRepository(Invitation)
       .createQueryBuilder('Invitation')
-      .where('Invitation.id = :id', { id: id })
+      .where('Invitation.token = :token', { token: token })
       .getOne();
-
+    if (invitation === null) return 'Invalid token';
     await this.dataSource
       .createQueryBuilder()
       .insert()
@@ -123,18 +126,21 @@ export class ProjectService {
       .createQueryBuilder()
       .update(User)
       .set({ status: 'Accept' })
-      .where('id = :id', { id: id })
+      .where('token = :token', { token: token })
       .execute();
     return 'Success';
   }
-  async ignoreInvite(id: number) {
-    const invitation = await this.dataSource
-      .createQueryBuilder()
-      .update(User)
-      .set({ status: 'Reject' })
-      .where('id = :id', { id: id })
-      .execute();
-
+  async ignoreInvite(token: string) {
+    try {
+      const invitation = await this.dataSource
+        .createQueryBuilder()
+        .update(User)
+        .set({ status: 'Reject' })
+        .where('token = :token', { token: token })
+        .execute();
+    } catch (err) {
+      return 'Invalid token';
+    }
     return 'Success';
   }
 }

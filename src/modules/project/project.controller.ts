@@ -50,12 +50,12 @@ export class ProjectController {
   ): Promise<DeleteResult> {
     return await this.projectService.removeMember(removeMemberDto);
   }
-  @Get('member/accept/:id')
-  async acceptInvite(@Param('id') id: number): Promise<String> {
-    return await this.projectService.acceptInvite(id);
+  @Get('member/accept/:token')
+  async acceptInvite(@Param('token') token: string): Promise<String> {
+    return await this.projectService.acceptInvite(token);
   }
-  @Get('member/ignore/:id')
-  async ignoreInvite(@Param('id') id: number): Promise<String> {
-    return await this.projectService.ignoreInvite(id);
+  @Get('member/ignore/:token')
+  async ignoreInvite(@Param('token') token: string): Promise<String> {
+    return await this.projectService.ignoreInvite(token);
   }
 }

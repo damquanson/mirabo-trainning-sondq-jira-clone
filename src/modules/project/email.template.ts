@@ -1,8 +1,10 @@
+require('dotenv').config();
 export function template(
   projectname: string,
   inviter: string,
   role: string,
   inviterEmail: string,
+  token: string,
 ) {
   return `<!DOCTYPE html>
   <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -325,8 +327,8 @@ export function template(
                                 <img src="images/person_2.jpg" alt="" style="width: 100px; max-width: 600px; height: auto; margin: auto; display: block;">
                                 <h3 class="name">${inviter}</h3>
                                 <span class="position">${inviterEmail} </span>
-                                 <p><a href="#" class="btn btn-primary">Accept Request</a></p>
-                                 <p><a href="#" class="btn-custom">Ignore Request</a></p>
+                                 <p><a href="${process.env.URLHOST}/project/member/accept/${token}" class="btn btn-primary">Accept Request</a></p>
+                                 <p><a href="${process.env.URLHOST}/project/member/igrone/${token}" class="btn-custom">Ignore Request</a></p>
                              </div>
                         </td>
                       </tr>

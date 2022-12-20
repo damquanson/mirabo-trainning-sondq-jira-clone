@@ -11,4 +11,6 @@ export class Invitation {
   role: string;
   @Column({ default: 'Pending' })
   status: string;
+  @Column()
+  token: string;
 }
