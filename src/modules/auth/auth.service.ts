@@ -6,6 +6,7 @@ import { UserDetails } from '../user/dto/login';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
+import { genSalt, hash } from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
@@ -36,7 +37,9 @@ export class AuthService {
 
     details['name'] = details.displayName;
     delete details.displayName;
-    details['password'] = 'randompassword';
+
+    const saltOrRounds = await genSalt();
+    details['password'] = await hash('randompassword', saltOrRounds);
     const newUser = this.userRepository.create(details);
     return this.userRepository.save(newUser);
   }

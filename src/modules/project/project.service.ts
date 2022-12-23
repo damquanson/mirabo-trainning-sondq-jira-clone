@@ -124,7 +124,7 @@ export class ProjectService {
       .execute();
     await this.dataSource
       .createQueryBuilder()
-      .update(User)
+      .update(Invitation)
       .set({ status: 'Accept' })
       .where('token = :token', { token: token })
       .execute();

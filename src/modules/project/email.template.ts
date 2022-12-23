@@ -327,8 +327,8 @@ export function template(
                                 <img src="images/person_2.jpg" alt="" style="width: 100px; max-width: 600px; height: auto; margin: auto; display: block;">
                                 <h3 class="name">${inviter}</h3>
                                 <span class="position">${inviterEmail} </span>
-                                 <p><a href="${process.env.URLHOST}/project/member/accept/${token}" class="btn btn-primary">Accept Request</a></p>
-                                 <p><a href="${process.env.URLHOST}/project/member/igrone/${token}" class="btn-custom">Ignore Request</a></p>
+                                 <p><a href="${process.env.HOSTURL}/project/member/accept/${token}" class="btn btn-primary">Accept Request</a></p>
+                                 <p><a href="${process.env.HOSTURL}/project/member/igrone/${token}" class="btn-custom">Ignore Request</a></p>
                              </div>
                         </td>
                       </tr>

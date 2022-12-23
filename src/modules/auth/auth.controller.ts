@@ -14,7 +14,7 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
   handleRedirect() {
-    return { msg: 'OK' };
+    return { msg: 'Login Successfully' };
   }
 
   @Get('status')
