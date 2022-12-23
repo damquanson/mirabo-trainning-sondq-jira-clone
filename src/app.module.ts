@@ -16,6 +16,9 @@ import { Comment } from './modules/comment/entities/comment.entity';
 import { userProject } from './modules/userProject/entities/userProject';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/auth.service';
+import { PassportModule } from '@nestjs/passport';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { Invitation } from './modules/project/entities/invitation.entity';
 dotenv.config();
 @Module({
   imports: [
@@ -31,15 +34,33 @@ dotenv.config();
       username: process.env.DBUSERNAME,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
-      entities: [User, Project, Task, SubTask, Comment, userProject],
+      entities: [
+        User,
+        Project,
+        Task,
+        SubTask,
+        Comment,
+        userProject,
+        Invitation,
+      ],
 
       //migrationsTableName: 'migrations',
       synchronize: true,
       dropSchema: false,
     }),
     AuthModule,
+    PassportModule.register({ session: true }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.HOSTMAIL,
+        auth: {
+          user: process.env.USERMAIL,
+          pass: process.env.PASSMAIL,
+        },
+      },
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [AppService],
 })
 export class AppModule {}

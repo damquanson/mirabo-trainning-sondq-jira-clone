@@ -9,6 +9,7 @@ import {
   UseGuards,
   ValidationPipe,
   UsePipes,
+  Request,
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -16,6 +17,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { ResponseUserDto } from './dto/response-user.dto';
 import { DeleteResult } from 'typeorm/query-builder/result/DeleteResult';
+import { AuthGuard } from '@nestjs/passport';
 // @UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
@@ -54,5 +56,10 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string): Promise<DeleteResult> {
     return this.userService.remove(+id);
+  }
+  @UseGuards(AuthGuard('local'))
+  @Post('auth/login')
+  async login(@Request() req) {
+    return req.user;
   }
 }
