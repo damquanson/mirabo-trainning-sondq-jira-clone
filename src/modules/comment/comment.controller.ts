@@ -28,9 +28,4 @@ export class CommentController {
   ): Promise<UpdateResult> {
     return this.commentService.update(+id, updateCommentDto);
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentService.remove(+id);
-  }
 }

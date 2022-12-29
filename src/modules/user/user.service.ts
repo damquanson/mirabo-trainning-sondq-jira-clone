@@ -41,7 +41,7 @@ export class UserService {
   async findOne(id: string): Promise<User> {
     return await this.userRepo.findOneBy({ id: parseInt(id) });
   }
-  async findOneName(email: string): Promise<User> {
+  async findOneEmail(email: string): Promise<User> {
     return await this.userRepo.findOneBy({ email: email });
   }
 

@@ -11,6 +11,8 @@ export class SubTask {
   reporterId: number;
   @Column()
   assigneeId: number;
+  @Column()
+  content: string;
   @Column({ default: 'To-do' })
   status: string;
   @Column({ default: 0 })

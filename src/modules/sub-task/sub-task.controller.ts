@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { SubTaskService } from './sub-task.service';
 import { createSubTaskDto } from './dto/create-sub-task.dto';
+import { updateSubTaskDto } from './dto/update-sub-task.dto';
 import { SubTask } from './entities/sub-task.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
@@ -44,7 +45,7 @@ export class SubTaskController {
   @Patch(':id')
   update(
     @Param('id') id: number,
-    @Body() updateSubTaskDto: createSubTaskDto,
+    @Body() updateSubTaskDto: updateSubTaskDto,
   ): Promise<UpdateResult> {
     return this.subTaskService.update(id, updateSubTaskDto);
   }

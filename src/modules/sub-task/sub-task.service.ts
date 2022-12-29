@@ -4,6 +4,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Comment } from '../comment/entities/comment.entity';
 import { Task } from '../task/entities/task.entity';
 import { createSubTaskDto } from './dto/create-sub-task.dto';
+import { updateSubTaskDto } from './dto/update-sub-task.dto';
 
 import { SubTask } from './entities/sub-task.entity';
 
@@ -50,7 +51,7 @@ export class SubTaskService {
 
   async update(
     id: number,
-    updateSubTaskDto: createSubTaskDto,
+    updateSubTaskDto: updateSubTaskDto,
   ): Promise<UpdateResult> {
     return await this.subTaskRepo.update(id, updateSubTaskDto);
   }

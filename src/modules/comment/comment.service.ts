@@ -19,8 +19,4 @@ export class CommentService {
   ): Promise<UpdateResult> {
     return await this.commentRepo.update(id, updateCommentDto);
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
-  }
 }

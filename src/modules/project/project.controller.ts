@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -13,6 +14,7 @@ import { Project } from './entities/project.entity';
 import { userProject } from '../userProject/entities/userProject';
 import { DeleteResult, InsertResult, UpdateResult } from 'typeorm';
 import { addMemberDto } from './dto/add-member-dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('project')
 export class ProjectController {
@@ -22,7 +24,7 @@ export class ProjectController {
   create(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
     return this.projectService.create(createProjectDto);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   find(@Param('id') id: number): Promise<userProject[]> {
     return this.projectService.find(id);

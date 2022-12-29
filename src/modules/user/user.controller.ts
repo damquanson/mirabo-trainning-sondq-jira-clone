@@ -23,7 +23,7 @@ import { AuthGuard } from '@nestjs/passport';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
+  @Post('register')
   @UsePipes(ValidationPipe)
   create(@Body() createUserDto: CreateUserDto): Promise<ResponseUserDto> {
     return this.userService.create(createUserDto);

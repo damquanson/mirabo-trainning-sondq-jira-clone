@@ -1,14 +1,29 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { User } from '../user/entities/user.entity';
 import { createTaskDto } from './dto/create-task.dto';
 
 import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TaskService {
-  constructor(@InjectRepository(Task) private taskRepo: Repository<Task>) {}
-  create(createTaskDto: createTaskDto) {
+  constructor(
+    @InjectRepository(Task) private taskRepo: Repository<Task>,
+    @InjectRepository(User) private userRepo: Repository<User>,
+    private mailServices: MailerService,
+  ) {}
+  async create(createTaskDto: createTaskDto) {
+    const member = await this.userRepo.findOneBy({
+      id: createTaskDto.assigneeId,
+    });
+    await this.mailServices.sendMail({
+      to: member.email,
+      from: 'damquanson@gmail.com',
+      subject: ' You have a new Task  ',
+      text: ' Task Description: ' + createTaskDto.content,
+    });
     return this.taskRepo.save(createTaskDto);
   }
 
