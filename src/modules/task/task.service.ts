@@ -2,6 +2,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { updateSubTaskDto } from '../sub-task/dto/update-sub-task.dto';
 import { User } from '../user/entities/user.entity';
 import { createTaskDto } from './dto/create-task.dto';
 
@@ -51,8 +52,9 @@ export class TaskService {
   async update(
     id: number,
     updateTaskDto: createTaskDto,
-  ): Promise<UpdateResult> {
-    return await this.taskRepo.update(id, updateTaskDto);
+  ): Promise<createTaskDto> {
+    await this.taskRepo.update(id, updateTaskDto);
+    return updateTaskDto;
   }
 
   async remove(id: number): Promise<DeleteResult> {

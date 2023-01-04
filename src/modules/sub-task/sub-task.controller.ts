@@ -43,10 +43,7 @@ export class SubTaskController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: number,
-    @Body() updateSubTaskDto: updateSubTaskDto,
-  ): Promise<UpdateResult> {
+  update(@Param('id') id: number, @Body() updateSubTaskDto: updateSubTaskDto) {
     return this.subTaskService.update(id, updateSubTaskDto);
   }
 

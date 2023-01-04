@@ -52,8 +52,9 @@ export class SubTaskService {
   async update(
     id: number,
     updateSubTaskDto: updateSubTaskDto,
-  ): Promise<UpdateResult> {
-    return await this.subTaskRepo.update(id, updateSubTaskDto);
+  ): Promise<updateSubTaskDto> {
+    await this.subTaskRepo.update(id, updateSubTaskDto);
+    return updateSubTaskDto;
   }
 
   async remove(id: number): Promise<DeleteResult> {
